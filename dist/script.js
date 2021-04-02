@@ -8,6 +8,20 @@
     model, // Our character
     neck, // Reference to the neck bone in the skeleton
     waist, // Reference to the waist bone in the skeleton
+    leftShoulder,
+    leftArm,
+    leftForeArm,
+    leftHand,
+    rightShoulder,
+    rightArm,
+    rightForeArm,
+    rightHand,
+    leftUpLeg,
+    leftLeg,
+    leftFoot,
+    rightUpLeg,
+    rightLeg,
+    rightFoot,
     possibleAnims, // Animations found in our file
     mixer, // THREE.js animations mixer
     idle, // Idle, the default state our character returns to
@@ -96,17 +110,54 @@
             o.receiveShadow = true;
             // o.material = stacy_mtl;
           }
-
-          if (o.isBone) {
-            console.log("Bone", o);
-          }
-
           // Reference the neck and waist bones
           if (o.isBone && o.name === "mixamorigNeck") {
             neck = o;
           }
           if (o.isBone && o.name === "mixamorigSpine") {
             waist = o;
+          }
+          if (o.isBone && o.name === "mixamorigLeftShoulder") {
+            leftShoulder = o;
+          }
+          if (o.isBone && o.name === "mixamorigLeftArm") {
+            leftArm = o;
+          }
+          if (o.isBone && o.name === "mixamorigLeftForeArm") {
+            leftForeArm = o;
+          }
+          if (o.isBone && o.name === "mixamorigLeftHand") {
+            leftHand = o;
+          }
+          if (o.isBone && o.name === "mixamorigRightShoulder") {
+            rightShoulder = o;
+          }
+          if (o.isBone && o.name === "mixamorigRightArm") {
+            rightArm = o;
+          }
+          if (o.isBone && o.name === "mixamorigRightForeArm") {
+            rightForeArm = o;
+          }
+          if (o.isBone && o.name === "mixamorigRightHand") {
+            rightHand = o;
+          }
+          if (o.isBone && o.name === "mixamorigLeftUpLeg") {
+            leftUpLeg = o;
+          }
+          if (o.isBone && o.name === "mixamorigLeftLeg") {
+            leftLeg = o;
+          }
+          if (o.isBone && o.name === "mixamorigLeftFoot") {
+            leftFoot = o;
+          }
+          if (o.isBone && o.name === "mixamorigRightUpLeg") {
+            rightUpLeg = o;
+          }
+          if (o.isBone && o.name === "mixamorigRightLeg") {
+            rightLeg = o;
+          }
+          if (o.isBone && o.name === "mixamorigRightFoot") {
+            rightFoot = o;
           }
         });
 
@@ -141,7 +192,7 @@
 
         // Perfect, we’ve loaded in our model. Let’s now load in the texture and apply it. This model came with the texture and the model has been mapped to this texture in Blender. This process is called UV mapping. Feel free to download the image itself to look at it, and learn more about UV mapping if you’d like to explore the idea of making your own character.
 
-        loaderAnim.remove();
+        // loaderAnim.remove();
 
         // All we’re doing here is removing the loading animation overlay once Stacy has been added to the scene. Save and then refresh, you should see the loader until the page is ready to show Stacy. If the model is cached, the page might load too quickly to see it.
 
@@ -246,9 +297,9 @@
   // One crucial aspect that Three.js relies on is an update function, which runs every frame, and is similar to how game engines work if you’ve ever dabbled with Unity. This function needs to be placed after our init() function instead of inside it. Inside our update function the renderer renders the scene and camera, and the update is run again. Note that we immediately call the function after the function itself.
 
   function update() {
-    if (mixer) {
-      mixer.update(clock.getDelta());
-    }
+    // if (mixer) {
+    //   mixer.update(clock.getDelta());
+    // }
 
     // The update takes our clock (a Clock was referenced at the top of our project) and updates it to that clock. This is so that animations don’t slow down if the frame rate slows down. If you run an animation to a frame rate, it’s tied to the frames to determine how fast or slow it runs, that’s not what you want.
 
@@ -314,7 +365,7 @@
       if (object.name === "stacy") {
         if (!currentlyAnimating) {
           currentlyAnimating = true;
-          playOnClick();
+          // playOnClick();
         }
       }
     }
@@ -333,10 +384,10 @@
   // Okay, so playOnClick. Below our rayasting function, add our playOnClick function.
 
   // Get a random animation, and play it
-  function playOnClick() {
-    let anim = Math.floor(Math.random() * possibleAnims.length) + 0;
-    playModifierAnimation(idle, 0.25, possibleAnims[anim], 0.25);
-  }
+  // function playOnClick() {
+  //   let anim = Math.floor(Math.random() * possibleAnims.length) + 0;
+  //   playModifierAnimation(idle, 0.25, possibleAnims[anim], 0.25);
+  // }
 
   // This simply chooses a random number between 0 and the length of our possibleAnims array, then we call another function called playModifierAnimation. This function takes in idle (we’re moving from idle), the speed to blend from idle to a new animation (possibleAnims[anim]), and the last argument is the speed to blend from our animation back to idle. Under our playOnClick function, lets add our playModifierAnimation and I’ll explain what its doing.
 
@@ -364,10 +415,11 @@
 
   document.addEventListener("mousemove", function (e) {
     var mousecoords = getMousePos(e);
-    if (neck && waist) {
-      moveJoint(mousecoords, neck, 50);
-      moveJoint(mousecoords, waist, 30);
-    }
+    // if (neck && waist) {
+    moveJoint(mousecoords, neck, 50);
+    moveJoint(mousecoords, waist, 30);
+    moveJoint(mousecoords, rightArm, 250);
+    // }
   });
 
   // Just like that, move your mouse around the viewport and Stacy should watch your cursor wherever you go! Notice how idle animation is still running, but because we snipped the neck and spine bone (yuck), we’re able to controls those independently.
@@ -382,6 +434,9 @@
     let degrees = getMouseDegrees(mouse.x, mouse.y, degreeLimit);
     joint.rotation.y = THREE.Math.degToRad(degrees.x);
     joint.rotation.x = THREE.Math.degToRad(degrees.y);
+    leftArm.rotation.x += THREE.Math.degToRad(10);
+    console.log("joint y", joint, joint.rotation.y);
+    console.log("joint x", joint, joint.rotation.x);
   }
 
   // The moveJoint function takes three arguments, the current mouse position, the joint we want to move, and the limit (in degrees) that the joint is allowed to rotate. This is called degreeLimit, remember this as I’ll talk about it soon.
