@@ -6,6 +6,7 @@
     renderer,
     camera,
     model, // Our character
+    modelPosition,
     neck, // Reference to the neck bone in the skeleton
     waist, // Reference to the waist bone in the skeleton
     leftShoulder,
@@ -102,12 +103,14 @@
         // A lot is going to happen here
         model = gltf.scene;
         let fileAnimations = gltf.animations;
-
+        console.log("Model", model);
         // First of all, we’re going to use the model’s traverse method to find all the meshs, and enabled the ability to cast and receive shadows. This is done like this. Again, this should go above scene.add(model):
         model.traverse((o) => {
           if (o.isMesh) {
             o.castShadow = true;
             o.receiveShadow = true;
+            modelPosition = o.position;
+            //console.log("modelPosition", modelPosition);
             // o.material = stacy_mtl;
           }
           // Reference the neck and waist bones
@@ -403,6 +406,12 @@
     }, to._clip.duration * 1000 - (tSpeed + fSpeed) * 1000);
   }
 
+  // leftUpLeg,
+  // leftLeg,
+  // leftFoot,
+  // rightUpLeg,
+  // rightLeg,
+
   //   The first thing we do is reset the to animation, this is the animation that’s about to play. We also set it to only play once, this is done because once the animation has completed its course (perhaps we played it earlier), it needs to be reset to play again. We then play it.
 
   // Each clipAction has a method called crossFadeTo, we use it to fade from (idle) to our new animation using our first speed (fSpeed, or from speed).
@@ -416,9 +425,28 @@
   document.addEventListener("mousemove", function (e) {
     var mousecoords = getMousePos(e);
     // if (neck && waist) {
-    moveJoint(mousecoords, neck, 50);
-    moveJoint(mousecoords, waist, 30);
-    moveJoint(mousecoords, rightArm, 250);
+    moveRotPlusJoint(mousecoords, neck, 50);
+    moveRotPlusJoint(mousecoords, waist, 30);
+
+    moveRotPlusJoint(mousecoords, rightShoulder, 50);
+    moveRotPlusJoint(mousecoords, rightArm, 50);
+    moveRotPlusJoint(mousecoords, rightForeArm, 70);
+    moveRotPlusJoint(mousecoords, rightHand, 50);
+
+    moveRotPlusJoint(mousecoords, leftShoulder, 50);
+    moveRotPlusJoint(mousecoords, leftArm, 50);
+    moveRotPlusJoint(mousecoords, leftForeArm, 70);
+    moveRotPlusJoint(mousecoords, leftHand, 50);
+
+    moveRotPlusJoint(mousecoords, rightUpLeg, 50);
+    moveRotPlusJoint(mousecoords, rightLeg, 50);
+    moveRotPlusJoint(mousecoords, rightFoot, 50);
+
+    moveRotMinusJoint(mousecoords, leftUpLeg, 50);
+    moveRotMinusJoint(mousecoords, leftLeg, 50);
+    moveRotMinusJoint(mousecoords, leftFoot, 50);
+
+    moveTrans(mousecoords, modelPosition, 50);
     // }
   });
 
@@ -428,18 +456,30 @@
     return { x: e.clientX, y: e.clientY };
   }
 
-  // Below this, we’re going to create a new function called moveJoint. I’ll walk us through everything that these functions do.
+  // Below this, we’re going to create a new function called moveRotPlusJoint. I’ll walk us through everything that these functions do.
 
-  function moveJoint(mouse, joint, degreeLimit) {
+  function moveRotPlusJoint(mouse, joint, degreeLimit) {
     let degrees = getMouseDegrees(mouse.x, mouse.y, degreeLimit);
     joint.rotation.y = THREE.Math.degToRad(degrees.x);
     joint.rotation.x = THREE.Math.degToRad(degrees.y);
-    leftArm.rotation.x += THREE.Math.degToRad(10);
-    console.log("joint y", joint, joint.rotation.y);
-    console.log("joint x", joint, joint.rotation.x);
+    //joint.rotation.z = THREE.Math.degToRad(degrees.y);
   }
 
-  // The moveJoint function takes three arguments, the current mouse position, the joint we want to move, and the limit (in degrees) that the joint is allowed to rotate. This is called degreeLimit, remember this as I’ll talk about it soon.
+  function moveRotMinusJoint(mouse, joint, degreeLimit) {
+    let degrees = getMouseDegrees(mouse.x, mouse.y, degreeLimit);
+    joint.rotation.y = THREE.Math.degToRad(-degrees.x);
+    joint.rotation.x = THREE.Math.degToRad(-degrees.y);
+    //joint.rotation.z = THREE.Math.degToRad(degrees.y);
+  }
+
+  function moveTrans(mouse, modelPosition, degreeLimit) {
+    let degrees = getMouseDegrees(mouse.x, mouse.y, degreeLimit);
+    model.position.z = degrees.x / 10;
+    model.position.x = degrees.y / 10;
+    //joint.rotation.z = THREE.Math.degToRad(degrees.y);
+  }
+
+  // The moveRotPlusJoint function takes three arguments, the current mouse position, the joint we want to move, and the limit (in degrees) that the joint is allowed to rotate. This is called degreeLimit, remember this as I’ll talk about it soon.
 
   // We have a variable called degrees referenced at the top, the degrees come from a function called getMouseDegrees, which returns an object of {x, y}. We then use these degrees to rotate the joint on the x axis and the y axis.
 
@@ -497,9 +537,9 @@
     return { x: dx, y: dy };
   }
 
-  // Once we have that function, we can now use moveJoint. We’re going to use it for the neck with a 50 degree limit, and for the waist with a 30 degree limit.
+  // Once we have that function, we can now use moveRotPlusJoint. We’re going to use it for the neck with a 50 degree limit, and for the waist with a 30 degree limit.
 
-  // Update our mousemove event listener to include these moveJoints:
+  // Update our mousemove event listener to include these moveRotPlusJoints:
 
   //   Our scene is super sparse, but it’s set up and we’ve got our resizing sorted, our lights and camera are working. Let’s add the model.
 })(); // Don't add anything below this line

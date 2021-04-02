@@ -1,52 +1,49 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>CodePen - Creating an Interactive 3D Character With Three.js</title>
-  
-
-</head>
-<body>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
-    <!-- Imporant meta information to make the page as rigid as possible on mobiles, to avoid unintentional zooming on the page itself  -->
-    <meta
-      name="viewport"
-      content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Character Tutorial</title>
-    <style>
-      #c {
-        width: 100vw;
-      }
-    </style>
+    <title>Model rig mouse input</title>
   </head>
   <body>
-    <!-- The loading element overlays all else until the model is loaded, at which point we remove this element from the DOM -->
-    <div class="loading" id="js-loader"><div class="loader"></div></div>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
 
-    <div class="wrapper">
-      <!-- The canvas element is used to draw the 3D scene -->
-      <canvas id="c"></canvas>
-    </div>
-  </body>
-</html>
+        <!-- Imporant meta information to make the page as rigid as possible on mobiles, to avoid unintentional zooming on the page itself  -->
+        <meta
+          name="viewport"
+          content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
 
-<!-- The main Three.js file -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/108/three.min.js"></script>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Character Tutorial</title>
+        <style>
+          #c {
+            width: 100vw;
+          }
+        </style>
+      </head>
+      <body>
+        <!-- The loading element overlays all else until the model is loaded, at which point we remove this element from the DOM -->
+        <div class="loading" id="js-loader"><div class="loader"></div></div>
 
-<!-- This brings in the ability to load custom 3D objects in the .gltf file format. Blender allows the ability to export to this format out the box -->
-<script src="https://cdn.jsdelivr.net/gh/mrdoob/Three.js@r92/examples/js/loaders/GLTFLoader.js"></script>
+        <div class="wrapper">
+          <!-- The canvas element is used to draw the 3D scene -->
+          <canvas id="c"></canvas>
+        </div>
+      </body>
+    </html>
 
-<!-- Our HTML consists of a loading animation (currently commented out until we need it), a wrapper div and our all-important canvas element. The canvas is what Three.js uses to render our scene, and the CSS sets this at 100% viewport size. We also load in two dependencies at the bottom of our HTML file: Three.js, and GLTFLoader (GLTF is the format that our 3D model is imported as). Both of these dependencies are available as npm modules.
+    <!-- The main Three.js file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/108/three.min.js"></script>
+
+    <!-- This brings in the ability to load custom 3D objects in the .gltf file format. Blender allows the ability to export to this format out the box -->
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/Three.js@r92/examples/js/loaders/GLTFLoader.js"></script>
+
+    <!-- Our HTML consists of a loading animation (currently commented out until we need it), a wrapper div and our all-important canvas element. The canvas is what Three.js uses to render our scene, and the CSS sets this at 100% viewport size. We also load in two dependencies at the bottom of our HTML file: Three.js, and GLTFLoader (GLTF is the format that our 3D model is imported as). Both of these dependencies are available as npm modules.
 
 The CSS also consists of a small amount of centering styling and the rest is just the loading animation; really nothing more to it than that. You can now collapse your HTML and CSS panels, we will delve into that very little for the rest of the tutorial. -->
 
-  <script  src="./script.js"></script>
-
-</body>
+    <script src="./script.js"></script>
+  </body>
 </html>
